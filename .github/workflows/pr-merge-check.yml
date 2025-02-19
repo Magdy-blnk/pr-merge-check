@@ -15,7 +15,7 @@ jobs:
 
       - name: Check for banned keywords and files
         run: |
-          BANNED_WORDS=("debug" "TODO" "fixme")
+          BANNED_WORDS=("DELETE" "DROP" )
           BANNED_FILES=("secrets.txt" "config.yaml")
 
           # Get list of changed files
