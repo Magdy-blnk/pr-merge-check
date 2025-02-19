@@ -42,4 +42,11 @@ jobs:
             fi
           done
           
-          echo "✅ No banned words or files found. Merge allowed."
+          # Check for Django migration files (inside any */migrations/ folder)
+            if [[ "$FILE" =~ migrations/[0-9]{4}_.*\.py$ ]]; then
+              echo "⚠️ Warning: Django migration detected - '$FILE'."
+              exit 1
+            fi
+          done
+          
+          echo "✅ No banned words, files, or Django migrations found. Merge allowed."
