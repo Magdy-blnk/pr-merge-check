@@ -1,0 +1,26 @@
+name: PR Keyword and File Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-keywords-and-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for forbidden keywords
+        run: |
+          if grep -ri "forbidden_keyword1\|forbidden_keyword2" .; then
+            echo "Forbidden keywords found in the changes!"
+            exit 1
+          fi
+
+      - name: Check for forbidden file names
+        run: |
+          if find . -name "forbidden_file.txt"; then
+            echo "Forbidden file found in the changes!"
+            exit 1
+          fi
