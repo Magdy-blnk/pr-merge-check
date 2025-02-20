@@ -26,6 +26,8 @@ jobs:
           BANNED_WORDS=("DELETE" "DROP")
           BANNED_FILES=("secrets.txt" "config.yaml")
 
+          echo "this shouldnt work"
+
           # Get list of changed files
           CHANGED_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }})
           echo "Changed files: $CHANGED_FILES"
