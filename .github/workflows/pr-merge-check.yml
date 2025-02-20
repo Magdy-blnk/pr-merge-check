@@ -2,7 +2,7 @@ name: PR Keyword and File Check
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened,pull_request, push]
+    types: [opened, synchronize, reopened]
 
 jobs:
   check-keywords-and-files:
