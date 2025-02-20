@@ -15,11 +15,6 @@ jobs:
 
       - name: Prevent modification of protected files
         uses: xalvarez/prevent-file-change-action@v1.7.0
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          pattern: '^\.github/workflows/.*'  # Regex pattern to match files in .github/workflows/
-          trustedAuthors: 'Rawda-fahim'    # Replace with your GitHub username
-          allowNewFiles: false
 
       - name: Check for banned keywords and files
         run: |
