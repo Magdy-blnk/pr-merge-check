@@ -8,10 +8,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check if workflow file was modified
+      - name: Determine base branch
         run: |
           BASE_BRANCH=$(git merge-base HEAD origin/main)
-          if git diff --name-only $BASE_BRANCH | grep -q ".github/workflows/"; then
+          echo "Base branch determined: $BASE_BRANCH"
+
+      - name: List changed files
+        run: |
+          git diff --name-only $BASE_BRANCH > changed_files.txt
+          echo "Changed files:"
+          cat changed_files.txt
+
+      - name: Check for workflow file modifications
+        run: |
+          if grep -q ".github/workflows/" changed_files.txt; then
             echo "🚨 ERROR: Modifications to GitHub Action workflow files are not allowed!"
             exit 1
+          else
+            echo "No workflow file modifications detected."
           fi
