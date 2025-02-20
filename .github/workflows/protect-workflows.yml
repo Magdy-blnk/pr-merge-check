@@ -7,23 +7,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Ensure the full history is fetched
 
-      - name: Determine base branch
-        run: |
-          BASE_BRANCH=$(git merge-base HEAD origin/main)
-          echo "Base branch determined: $BASE_BRANCH"
+      - name: Fetch main branch
+        run: git fetch origin main
 
       - name: List changed files
         run: |
-          git diff --name-only $BASE_BRANCH > changed_files.txt
+          git diff --name-only origin/main...HEAD > changed_files.txt
           echo "Changed files:"
           cat changed_files.txt
 
       - name: Check for workflow file modifications
         run: |
-          if grep -q ".github/workflows/" changed_files.txt; then
+          if grep -q "^.github/workflows/" changed_files.txt; then
             echo "🚨 ERROR: Modifications to GitHub Action workflow files are not allowed!"
             exit 1
           else
-            echo "No workflow file modifications detected."
+            echo "✅ No workflow file modifications detected."
           fi
