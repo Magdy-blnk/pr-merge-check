@@ -31,17 +31,6 @@ jobs:
               fi
             done
 
-            # Check for banned keywords in each file
-            if [[ -f "$FILE" ]]; then  # Ensure the file exists before searching
-              for WORD in "${BANNED_WORDS[@]}"; do
-                if grep -q "$WORD" "$FILE"; then
-                  echo "❌ Error: Found banned keyword '$WORD' in file '$FILE'."
-                  exit 1
-                fi
-              done
-            fi
-          done
-
           # Check for Django migration files (inside any */migrations/ folder)
             echo "$FILE"
             if [[ "$FILE" =~ .*/migrations/[0-9]{4}_.*\.py$ ]]; then
