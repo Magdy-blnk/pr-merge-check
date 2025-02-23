@@ -1,19 +1,23 @@
-name: PR Keyword and File Check
+name: PR Checks
 
 on:
   pull_request:
-    branch:
+    branches:
       - main
-    types: [opened, synchronize, reopened]
 
 jobs:
-  check-keywords-and-files:
+  check-pr:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout main branch
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensures git history is available for git diff
+          ref: main  # Always get the workflow from main branch
+
+      - name: Fetch PR branch changes
+        run: |
+          git fetch origin ${{ github.event.pull_request.head.ref }} --depth=1
 
       - name: Check for banned keywords and files
         run: |
@@ -21,7 +25,7 @@ jobs:
           BANNED_FILES=("secrets.txt" "config.yaml")
 
           # Get list of changed files
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }})
+          CHANGED_FILES=$(git diff --name-only origin/main origin/${{ github.event.pull_request.head.ref }})
           echo "Changed files: $CHANGED_FILES"
 
           for FILE in $CHANGED_FILES; do
@@ -33,8 +37,8 @@ jobs:
               fi
             done
 
-            # Check for banned keywords in each file
-            if [[ -f "$FILE" ]]; then  # Ensure the file exists before searching
+            # Ensure the file exists before searching for keywords
+            if [[ -f "$FILE" ]]; then
               for WORD in "${BANNED_WORDS[@]}"; do
                 if grep -q "$WORD" "$FILE"; then
                   echo "❌ Error: Found banned keyword '$WORD' in file '$FILE'."
@@ -50,19 +54,14 @@ jobs:
             fi
           done
 
-          echo "✅ No banned words or files found, no Migration. Merge allowed."
-
-
-
-
-
-
-
+          echo "✅ No banned words or files found. Merge allowed."
 
 # name: PR Keyword and File Check
 
 # on:
 #   pull_request:
+#     branch:
+#       - main
 #     types: [opened, synchronize, reopened]
 
 # jobs:
@@ -76,7 +75,7 @@ jobs:
 
 #       - name: Check for banned keywords and files
 #         run: |
-#           BANNED_WORDS=("DELETE" "DROP" )
+#           BANNED_WORDS=("DELETE" "DROP")
 #           BANNED_FILES=("secrets.txt" "config.yaml")
 
 #           # Get list of changed files
@@ -101,15 +100,19 @@ jobs:
 #                 fi
 #               done
 #             fi
-#           done
 
-#           # Check for Django migration files (inside any */migrations/ folder)
-#             echo "$FILE"
+#             # Check for Django migration files (inside any */migrations/ folder)
 #             if [[ "$FILE" =~ .*/migrations/[0-9]{4}_.*\.py$ ]]; then
 #               echo "⚠️ Warning: Django migration detected - '$FILE'."
 #               exit 1
 #             fi
-          
+#           done
+
 #           echo "✅ No banned words or files found, no Migration. Merge allowed."
+
+
+
+
+
 
 
