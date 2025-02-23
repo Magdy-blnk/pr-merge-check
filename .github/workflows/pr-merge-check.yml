@@ -2,6 +2,8 @@ name: PR Keyword and File Check
 
 on:
   pull_request:
+    branch:
+      - main
     types: [opened, synchronize, reopened]
 
 jobs:
