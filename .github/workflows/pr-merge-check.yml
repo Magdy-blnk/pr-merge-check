@@ -1,19 +1,19 @@
-name: PR Checks
+name: PR Checks (Main Branch Workflow)
 
 on:
   pull_request:
     branches:
-      - main
+      - main  # This ensures the workflow runs for PRs targeting main
 
 jobs:
   check-pr:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout main branch
+      - name: Checkout main branch workflow
         uses: actions/checkout@v4
         with:
-          ref: main  # Always get the workflow from main branch
+          ref: main  # Ensure we fetch the latest workflow from main
 
       - name: Fetch PR branch changes
         run: |
@@ -55,6 +55,7 @@ jobs:
           done
 
           echo "✅ No banned words or files found. Merge allowed."
+
 
 # name: PR Keyword and File Check
 
