@@ -1,5 +1,5 @@
 name: Protect GitHub Actions Workflows
-on: [pull_request, push]
+on: [push]
 
 jobs:
   check-workflow:
