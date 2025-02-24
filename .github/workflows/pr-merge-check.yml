@@ -2,8 +2,7 @@ name: PR Checks (Main Branch Workflow)
 
 on:
   pull_request:
-    branches:
-      - main  # This ensures the workflow runs for PRs targeting main
+    types: [opened, synchronize, reopened]
 
 jobs:
   check-pr:
