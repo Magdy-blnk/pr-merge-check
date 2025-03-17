@@ -1,3 +1,1 @@
-# pr-merge-check
-
-.
+# pr-merge-check testing repo
